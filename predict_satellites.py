@@ -46,7 +46,10 @@ def satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     Halo_subs_cut = Halo_subs[cut_idx]
     #Calculate luminosities
     sort_idx = np.argsort(np.argsort(Halo_subs_cut['vpeak']))
-    satellite_properties['Mr'] = (np.log(np.random.lognormal(vpeak_Mr_interp(Halo_subs_cut['vpeak'],params['alpha']),(np.log(10)*params['sigma_M']).clip(min=hparams['sigma_M_min']))))[sort_idx]
+    Mr_mean = vpeak_Mr_interp(Halo_subs_cut['vpeak'], params['alpha'])[sort_idx]
+    L_mean = 10**((-1.*Mr_mean + 4.81)/2.5 + np.log10(2))
+    L = np.random.lognormal(np.log(L_mean),(np.log(10)*params['sigma_M']).clip(min=hparams['sigma_M_min']))
+    satellite_properties['Mr'] = -1.*(2.5*(np.log10(L)-np.log10(2))-4.81)
     #Calculate positions
     Halo_main = halo_data['Halo_main']
     Halox = hparams['chi']*(Halo_subs_cut['x']-Halo_main[0]['x'])*(1000/cosmo_params['h'])
@@ -57,7 +60,7 @@ def satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     #Calculate sizes
     c = halo_data['rvir']/halo_data['rs']
     Halo_r12 = (hparams['A']*(c[cut_idx]/10.0)**(hparams['gamma'])*halo_data['rvir'][cut_idx]/cosmo_params['h'])**(((Halo_subs_cut['vmax']/Halo_subs_cut['vacc']).clip(max=1.0))**hparams['beta'])
-    satellite_properties['r12'] = np.log(np.random.lognormal(Halo_r12,np.log(10)*hparams['sigma_r'])).clip(min=hparams['size_min']) 
+    satellite_properties['r12'] = np.random.lognormal(np.log(Halo_r12),np.log(10)*hparams['sigma_r']).clip(min=hparams['size_min']) 
     #Calculate disruption probabilities
     satellite_properties['prob'] = halo_data['Halo_ML_prob'][cut_idx]**(1./params['B'])
     ###
