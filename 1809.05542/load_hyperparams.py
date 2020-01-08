@@ -5,11 +5,11 @@ def load_hyperparams():
     Returns hyperparameters, cosmological parameters, and loads data for predict_satellites.py and predict_orphans.py
     """
     #Load halo data (encoding='latin1' for Python3)
-    with open('halo_data.pkl', 'rb') as halo_input:
+    with open('../Data/halo_data.pkl', 'rb') as halo_input:
         halo_data = pickle.load(halo_input, encoding='latin1')
 
     #Load interpolator
-    with open('interpolator.pkl', 'rb') as interp:
+    with open('../Data/interpolator.pkl', 'rb') as interp:
         vpeak_Mr_interp = pickle.load(interp, encoding='latin1')
 
     #Cosmological params
@@ -30,5 +30,10 @@ def load_hyperparams():
     hparams['sigma_r'] = 0.01
     hparams['size_min'] = 0.02
     hparams['O'] = 1.
+
+    #Orphan hyperparameters
+    orphan_params = {}
+    orphan_params['eps'] = 0.01 
+    orphan_params['df'] = 1
     ###
-    return hparams, cosmo_params, halo_data, vpeak_Mr_interp 
+    return hparams, cosmo_params, orphan_params, halo_data, vpeak_Mr_interp

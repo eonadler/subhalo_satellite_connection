@@ -1,9 +1,3 @@
-eps = 0.01 
-df = 1
-h = 0.7
-omega_m = 0.286
-omea_lambda = 0.714
-
 def integrand(z):
     return 1/(2.269*(10**-18)*((1+z)*(np.sqrt(omega_m*(1+z)**3 + omega_lambda))))
 
