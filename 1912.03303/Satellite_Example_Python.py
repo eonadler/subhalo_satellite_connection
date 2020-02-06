@@ -5,10 +5,14 @@ from predict_orphans import orphan_satellite_properties
 #Set parameters
 params = {}
 
-params['alpha'] = -1.3
-params['sigma_M'] = 0.2
-params['mpeak_cut'] = 8.
+params['alpha'] = -1.4
+params['sigma_M'] = 0.1
+params['M50'] = 8.
+params['sigma_mpeak'] = 0.35
 params['B'] = 1.
+params['A'] = 34
+params['sigma_r'] = 0.3
+params['n'] = 1.3
 
 #Load hyperparameters
 hparams, cosmo_params, orphan_params, halo_data, vpeak_Mr_interp = load_hyperparams()

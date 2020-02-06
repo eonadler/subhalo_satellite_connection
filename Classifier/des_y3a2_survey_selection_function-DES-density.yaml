@@ -1,0 +1,16 @@
+infile:
+  stellar_density: ../Classifier/des_stellar_density_r22_equ_n128_v0.fits
+  mask: /nfs/slac/g/ki/ki21/cosmo/ollienad/Data/DES/
+operation:
+  survey: 'des'
+  params_intrinsic:
+  - - distance
+    - log
+  - - abs_mag
+    - linear
+  - - r_physical
+    - log
+  - - density
+    - linear
+simple:
+  classifier: ../Classifier/classifier_stellar_des_v12.2.0.model

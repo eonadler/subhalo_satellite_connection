@@ -1,0 +1,15 @@
+infile:
+  stellar_density: ../Classifier/ps1_stellar_density_r22_equ_n128_v0.fits #ps1_dr1_stellar_density_map_cel_nside_256.npy
+operation:
+  survey: 'ps1'
+  params_intrinsic:
+  - - distance
+    - log
+  - - abs_mag
+    - linear
+  - - r_physical
+    - log
+  - - density
+    - linear
+simple:
+  classifier: ../Classifier/classifier_stellar_ps1_v13.0.1.model
