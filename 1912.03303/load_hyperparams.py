@@ -22,13 +22,10 @@ def load_hyperparams():
     hparams = {}
     hparams['vpeak_cut'] = 10.
     hparams['vmax_cut'] = 9.
-    hparams['sigma_M_min'] = 10**-5
     hparams['chi'] = 1.
-    hparams['A'] = 0.02
-    hparams['gamma'] = -0.7
+    hparams['R0'] = 10.0
+    hparams['gamma_r'] = 0.0
     hparams['beta'] = 0.
-    hparams['sigma_r'] = 0.01
-    hparams['size_min'] = 0.02
     hparams['O'] = 1.
 
     #Orphan hyperparameters
