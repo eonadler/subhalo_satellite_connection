@@ -41,7 +41,7 @@ def orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_i
     orphan_satellite_properties = {}
     #Cut subhalo catalogs
     Halo_subs = halo_data['orphan_catalog']
-    mpeak_idx = (halo_data['orphan_catalog_mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>10**(params['M50']))
+    mpeak_idx = (halo_data['orphan_catalog_mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>10**7)
     radii_idx = Halo_subs[:,3] < 300
     cut_idx = mpeak_idx & radii_idx
     Halo_subs_cut = Halo_subs[cut_idx]

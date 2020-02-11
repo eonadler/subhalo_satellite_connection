@@ -41,7 +41,7 @@ def satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     satellite_properties = {}
     #Cut subhalo catalogs
     Halo_subs = halo_data['Halo_subs']
-    mpeak_idx = (Halo_subs['mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>10**(params['M50']))
+    mpeak_idx = (Halo_subs['mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>10**7)
     vpeak_idx = (Halo_subs['vpeak']>hparams['vpeak_cut'])
     vmax_idx = (Halo_subs['vmax']>hparams['vmax_cut'])
     cut_idx = mpeak_idx & vpeak_idx & vmax_idx
