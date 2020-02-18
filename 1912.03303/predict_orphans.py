@@ -66,7 +66,7 @@ def orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_i
     orphan_satellite_properties['r12'] = np.random.lognormal(np.log(Halo_r12),np.log(10)*params['sigma_r'])
     #Calculate disruption probability due to baryonic effects and occupation fraction
     baryonic_disruption_prob = (1.-halo_data['orphan_aacc'][cut_idx])**(hparams['O'])
-    occupation_prob = 0.5*(1.+erf((np.log10(halo_data['orphan_catalog_mpeak'][cut_idx]*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak']))).clip(max=1.)
+    occupation_prob = (0.5*(1.+erf((np.log10(halo_data['orphan_catalog_mpeak'][cut_idx]*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak'])))).clip(max=1.)
     orphan_satellite_properties['prob'] = 1.-((1.-baryonic_disruption_prob)*occupation_prob)   
     ###
     return orphan_satellite_properties

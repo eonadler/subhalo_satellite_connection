@@ -67,7 +67,7 @@ def satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     satellite_properties['r12'] = np.random.lognormal(np.log(Halo_r12),np.log(10)*params['sigma_r'])
     #Calculate disruption probability due to baryonic effects and occupation fraction
     baryonic_disruption_prob = halo_data['Halo_ML_prob'][cut_idx]**(1./params['B'])
-    occupation_prob = 0.5*(1.+erf((np.log10(Halo_subs_cut['mpeak']*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak']))).clip(max=1.)
+    occupation_prob = (0.5*(1.+erf((np.log10(Halo_subs_cut['mpeak']*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak'])))).clip(max=1.)
     satellite_properties['prob'] = 1.-((1.-baryonic_disruption_prob)*occupation_prob)
     ###
     return satellite_properties
