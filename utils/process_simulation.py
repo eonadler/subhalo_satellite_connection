@@ -157,7 +157,7 @@ def get_destroyed_properties(ids, subtree, tree):
             subtree_snap_prior = subtree[key][np.in1d(subtree[key]['scale'], scale[key][i-1], assume_unique=True)]
             subtree_snap = subtree[key][np.in1d(subtree[key]['scale'], scale[key][i], assume_unique=True)]
             for j in range (1,len(subtree_snap)-1):
-                if(subtree_snap[j]['desc_id'] == subtree_snap_prior[0][1]):
+                if(subtree_snap[j]['desc_id'] == subtree_snap_prior[0]['id']):
                     destroyed_catalog_temp.append(subtree[key][np.in1d(subtree[key]['depth_first_id'], 
                                                                        np.arange(subtree_snap[j]['depth_first_id'], 
                                                                                  subtree_snap[j+1]['depth_first_id']-1), 
