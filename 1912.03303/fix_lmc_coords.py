@@ -3,7 +3,7 @@ import astropy.units as u
 from astropy.coordinates import SkyCoord
 
 def get_lmc_coords(halo_data,cosmo_params,lmc_true_sky_coords='05:23:34.5 -69:45.37'):
-	"""
+    """
     Returns Cartesian coordinates of LMC analog assuming (a) it is fixed to the sky position of the true LMC, and (b) the true LMC is at the distance of the mock LMC
 
     Args:
@@ -47,9 +47,9 @@ def rotate_about_LMC(satellite_properties,lmc_cartesian_coords,observer_distance
     	x[i*2][i] = observer_distance
     	x[i*2+1][i] = -1.*observer_distance
 
-	pos = pos - x[np.random.randint(0,observer_locations)]
+    pos = pos - x[np.random.randint(0,observer_locations)]
 
-	#Set LMC coordinates (still assumes LMC analog is 0th subhalo)
+    #Set LMC coordinates (still assumes LMC analog is 0th subhalo)
     mock_lmc_coords = (pos[0][0], pos[0][1], pos[0][2])
     true_lmc_coords = lmc_cartesian_coords
 
