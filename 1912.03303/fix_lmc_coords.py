@@ -15,7 +15,7 @@ def get_lmc_coords(halo_data,cosmo_params,lmc_true_sky_coords='05:23:34.5 -69:45
     lmc_cartesian_coords (array): Cartesian coordinates of LMC analog
     """
 	#Get MW and LMC analogs; currently assumes LMC analog is 0th subhalo
-	mw_analog = halo_data['Halo_main'][0]
+    mw_analog = halo_data['Halo_main'][0]
 	lmc_analog = halo_data['Halo_subs'][0]
 
 	#Get LMC distance and perform coordinate transformation
@@ -44,8 +44,8 @@ def rotate_about_LMC(satellite_properties,lmc_cartesian_coords,observer_distance
 	x = np.zeros((observer_locations,3))
 
 	for i in range(observer_locations/2):
-    		x[i*2][i] = observer_distance
-    		x[i*2+1][i] = -1.*observer_distance
+        x[i*2][i] = observer_distance
+        x[i*2+1][i] = -1.*observer_distance
 
 	pos = pos - x[np.random.randint(0,observer_locations)]
 
@@ -65,8 +65,8 @@ def rotate_about_LMC(satellite_properties,lmc_cartesian_coords,observer_distance
 	r = I + k + np.matmul(k,k) * ((1 -c)/(s**2))
 
 	for i in range (0,len(rotated_pos)):
-        	mock_lmc_coords = (rotated_pos[i][0],rotated_pos[i][1],rotated_pos[i][2])
-        	(rotated_pos[i][0],rotated_pos[i][1],rotated_pos[i][2]) = np.asarray(r*np.reshape(mock_lmc_coords,(3,1)))[:,0]
+        mock_lmc_coords = (rotated_pos[i][0],rotated_pos[i][1],rotated_pos[i][2])
+        (rotated_pos[i][0],rotated_pos[i][1],rotated_pos[i][2]) = np.asarray(r*np.reshape(mock_lmc_coords,(3,1)))[:,0]
 
 	satellite_properties['rotated_pos'] = rotated_pos
 
