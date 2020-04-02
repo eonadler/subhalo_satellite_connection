@@ -20,7 +20,7 @@ def transform_to_observer_frame(pos,observer_distance=8.,observer_locations=6):
         x[i*2][i] = observer_distance
         x[i*2+1][i] = -1.*observer_distance
 
-	pos_observer_frame = pos - x[np.random.randint(0,observer_locations)]
+	pos_observer_frame = pos - x[np.random.randint(observer_locations)]
 
 	return pos_observer_frame
 
@@ -47,7 +47,7 @@ def rotate_about_vector(pos,vec1,vec2):
 
 	vXStr = '{} {} {}; {} {} {}; {} {} {}'.format(0., -v[2], v[1], v[2], 0., -v[0], -v[1], v[0], 0.)
 	K = np.matrix(vXStr)
-	R = I + k + np.matmul(K,K) * ((1.-c)/(s**2))
+	R = I + K + np.matmul(K,K) * ((1.-c)/(s**2))
 
 	for i in range (0,len(rotated_pos)):
         temp_vec = (pos[i][0],pos[i][1],pos[i][2])
@@ -96,12 +96,11 @@ def rotate_about_LMC(satellite_properties,lmc_cartesian_coords,lmc_ind):
 	#Change satellite positions to observer frame
 	pos_observer_frame = transform_to_observer_frame(pos)
 
-	#Set LMC coordinates (still assumes LMC analog is 0th subhalo)
+	#Set LMC coordinates
 	mock_lmc_coords = (pos_observer_frame[lmc_ind][0], pos_observer_frame[lmc_ind][1], pos_observer_frame[lmc_ind][2])
-	true_lmc_coords = lmc_cartesian_coords
 
 	#Perform coordinate rotation
-	rotated_pos = rotate_about_vector(pos_observer_frame,mock_lmc_coords,true_lmc_coords)
+	rotated_pos = rotate_about_vector(pos_observer_frame,mock_lmc_coords,lmc_cartesian_coords)
 	satellite_properties['rotated_pos'] = rotated_pos
 
 	return satellite_properties
