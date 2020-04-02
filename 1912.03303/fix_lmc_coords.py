@@ -55,21 +55,22 @@ def rotate_about_vector(pos,vec1,vec2):
 
     return rotated_pos
 
-def get_lmc_coords(halo_data,cosmo_params,lmc_true_sky_coords='05:23:34.5 -69:45.37'):
+def get_lmc_coords(halo_data,cosmo_params,lmc_ind,lmc_true_sky_coords='05:23:34.5 -69:45.37'):
     """
     Returns Cartesian coordinates of LMC analog assuming (a) it is fixed to the sky position of the true LMC, and (b) the true LMC is at the distance of the mock LMC
 
     Args:
     halo_data (dict): dict containing properties of host and subhalos 
     cosmo_params (dict): dict containing cosmological parameters
+    lmc_ind (int): index of LMC analog in 'Halo_subs'
     lmc_true_sky_coords (string): true RA and dec of LMC
 
     Returns:
     lmc_cartesian_coords (array): Cartesian coordinates of LMC analog
     """
-	#Get MW and LMC analogs; currently assumes LMC analog is 0th subhalo
+	#Get MW and LMC analogs
     mw_analog = halo_data['Halo_main'][0]
-	lmc_analog = halo_data['Halo_subs'][0]
+	lmc_analog = halo_data['Halo_subs'][lmc_ind]
 
 	#Get LMC distance and perform coordinate transformation
 	lmc_distance = (1000./cosmo_params['h'])*np.sqrt((lmc_analog['x']-mw_analog['x'])**2+(lmc_analog['y']-mw_analog['y'])**2+(lmc_analog['z']-mw_analog['z'])**2)
@@ -78,13 +79,14 @@ def get_lmc_coords(halo_data,cosmo_params,lmc_true_sky_coords='05:23:34.5 -69:45
 
 	return lmc_cartesian_coords
 
-def rotate_about_LMC(satellite_properties,lmc_cartesian_coords):
+def rotate_about_LMC(satellite_properties,lmc_cartesian_coords,lmc_ind):
     """
     Returns Cartesian coordinates of mock satellites, rotated such that the LMC is fixed at the Cartesian coordinates from the previous function
 
     Args:
     satellite_properties (dict): dict containing properties of satellites
     lmc_cartesian_coords (array): Cartesian coordinates of LMC analog
+    lmc_ind (int): index of LMC analog in 'Halo_subs'
 
     Returns:
     satellite_properties (dict): dict containing properties of satellites including rotated positions
@@ -95,7 +97,7 @@ def rotate_about_LMC(satellite_properties,lmc_cartesian_coords):
 	pos_observer_frame = transform_to_observer_frame(pos)
 
 	#Set LMC coordinates (still assumes LMC analog is 0th subhalo)
-	mock_lmc_coords = (pos_observer_frame[0][0], pos_observer_frame[0][1], pos_observer_frame[0][2])
+	mock_lmc_coords = (pos_observer_frame[lmc_ind][0], pos_observer_frame[lmc_ind][1], pos_observer_frame[lmc_ind][2])
 	true_lmc_coords = lmc_cartesian_coords
 
 	#Perform coordinate rotation
