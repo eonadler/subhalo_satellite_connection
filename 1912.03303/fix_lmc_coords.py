@@ -2,7 +2,7 @@ import numpy as np
 import astropy.units as u
 from astropy.coordinates import SkyCoord
 
-def transform_to_observer_frame(pos,observer_distance=8.,observer_locations=6):
+def transform_to_observer_frame(pos,observer_ind,observer_distance=8.,observer_locations=6):
     """
     Transforms Galactocentric position vectors to the frame of a randomly oriented heliocentric observer at the correct Galactocentric distance
 
@@ -20,7 +20,7 @@ def transform_to_observer_frame(pos,observer_distance=8.,observer_locations=6):
         x[i*2][i] = observer_distance
         x[i*2+1][i] = -1.*observer_distance
     
-    pos_observer_frame = pos - x[np.random.randint(observer_locations)]
+    pos_observer_frame = pos - x[observer_ind]
 
     return pos_observer_frame
 
@@ -79,7 +79,7 @@ def get_lmc_coords(halo_data,cosmo_params,lmc_ind,lmc_true_sky_coords='05:23:34.
 
     return lmc_cartesian_coords
 
-def rotate_about_LMC(satellite_properties,halo_data,cosmo_params,lmc_cartesian_coords,lmc_ind):
+def rotate_about_LMC(satellite_properties,halo_data,cosmo_params,lmc_cartesian_coords,lmc_ind,observer_ind):
     """
     Returns Cartesian coordinates of mock satellites, rotated such that the LMC is fixed at the Cartesian coordinates from the previous function
 
@@ -96,7 +96,7 @@ def rotate_about_LMC(satellite_properties,halo_data,cosmo_params,lmc_cartesian_c
     pos = satellite_properties['pos']
 
     #Change satellite positions to observer frame
-    pos_observer_frame = transform_to_observer_frame(pos)
+    pos_observer_frame = transform_to_observer_frame(pos,observer_ind)
 
     #Set LMC coordinates
     mock_lmc_coords = (pos_observer_frame[lmc_ind][0], pos_observer_frame[lmc_ind][1], pos_observer_frame[lmc_ind][2])
