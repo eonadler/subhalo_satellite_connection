@@ -14,7 +14,7 @@ params['B'] = 1.
 hparams, cosmo_params, orphan_params, halo_data, vpeak_Mr_interp = load_hyperparams()
 
 #Return satellite properties for a particular host halo
-satellite_properties = satellite_properties(halo_data[0], params, hparams, cosmo_params, vpeak_Mr_interp)
+satellite_properties = get_satellite_properties(halo_data[0], params, hparams, cosmo_params, vpeak_Mr_interp)
 
 #Return orphan satellite properties for a particular host halo
-orphan_satellite_properties = orphan_satellite_properties(halo_data[0], params, hparams, cosmo_params, vpeak_Mr_interp)
+orphan_satellite_properties = get_orphan_satellite_properties(halo_data[0], params, hparams, cosmo_params, vpeak_Mr_interp)

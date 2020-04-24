@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.special import erf
 
-def satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
+def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     """
     Returns properties of luminous satellites corresponding to surviving subhalos at z=0 in a DMO zoom-in simulation
 

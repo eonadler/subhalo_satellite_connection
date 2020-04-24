@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.special import erf
 
-def orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
+def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     """
     Returns properties of luminous orphan satellites corresponding to disrupted subhalos that have been tracked to z=0 in a DMO zoom-in simulation
 
