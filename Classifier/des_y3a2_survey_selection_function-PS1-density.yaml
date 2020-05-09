@@ -2,6 +2,7 @@ infile:
   stellar_density: ../Classifier/ps1_stellar_density_r22_equ_n128_v0.fits #ps1_dr1_stellar_density_map_cel_nside_256.npy
 operation:
   survey: 'ps1'
+  algorithm: 'simple'
   params_intrinsic:
   - - distance
     - log

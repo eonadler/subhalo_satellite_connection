@@ -3,6 +3,7 @@ infile:
   mask: /nfs/slac/g/ki/ki21/cosmo/ollienad/Data/DES/
 operation:
   survey: 'des'
+  algorithm: simple
   params_intrinsic:
   - - distance
     - log

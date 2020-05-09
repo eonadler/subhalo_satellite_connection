@@ -103,7 +103,7 @@ def load_mask(survey):
     return indices
 
 
-def evaluate_mask(ra, dec, indices, cut_footprint=True, cut_ebv=True, cut_associate=True, cut_bsc=True, cut_dwarfs=True, dwarftype='2'):
+def evaluate_mask(ra, dec, indices, survey, cut_footprint=True, cut_ebv=True, cut_associate=True, cut_bsc=True, cut_dwarfs=True, dwarftype='2'):
     """
     Applies selection masks from https://arxiv.org/abs/1912.03302 to simulation data
 
@@ -111,6 +111,7 @@ def evaluate_mask(ra, dec, indices, cut_footprint=True, cut_ebv=True, cut_associ
         ra (array): array of ra values (in degrees) for mock satellites 
         dec (array): array of decd values (in degrees) for mock satellites 
         indices (bitmask): bitmask for a given survey
+        survey (string): name of survey
 
     Returns:
         survey_flags (Boolean array): array of Boolean values (True = good pixel, False = bad pixel) 
@@ -149,5 +150,10 @@ def evaluate_mask(ra, dec, indices, cut_footprint=True, cut_ebv=True, cut_associ
     if cut_dwarfs:
         cut_dwarf_flags = np.where(indices[pix] & BITS['DWARF{}'.format(dwarftype)], False, True)
         survey_flags = survey_flags & cut_dwarf_flags
+
+    if survey == 'ps1':
+        cut_fail_flags = np.where(indices[pix] & BITS['FAIL'], False, True)
+        cut_art_flags = np.where(indices[pix] & BITS['ART'], False, True)
+        survey_flags = survey_flags & cut_fail_flags & cut_art_flags
 
     return survey_flags
