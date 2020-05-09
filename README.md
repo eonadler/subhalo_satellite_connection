@@ -15,8 +15,9 @@ Code releases and accompanying papers:
 
 -- The healpix masks necessary to implement the DES and PS1 survey selection functions in V2 can downloaded using the following links. Please see https://github.com/des-science/mw-sats for additional information.
 
-  DES mask: https://drive.google.com/file/d/1yF0pysai6rY13x17YY3KXZGVeDp25skz/view?usp=sharing
-  PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view?usp=sharing
+DES mask: https://drive.google.com/file/d/1yF0pysai6rY13x17YY3KXZGVeDp25skz/view?usp=sharing
+  
+PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view?usp=sharing
 
 ### Utils
 
