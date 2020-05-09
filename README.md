@@ -7,7 +7,7 @@ Code releases and accompanying papers:
 
 -- Contains tools for forward-modeling the population of classical and SDSS MW satellites.
 
-### V2: Milky Way Satellite Census -- II. Galaxy-Halo Connection Constraints Including the Impact of the Large Magellanic Cloud (https://arxiv.org/abs/1912.03303).
+### V2: Milky Way Satellite Census. II. Galaxy-Halo Connection Constraints Including the Impact of the Large Magellanic Cloud (https://arxiv.org/abs/1912.03303).
 
 -- Implements the updated satellite galaxy--subhalo connection model described in the papers, which builds on the V1 model by including tools to analyze simulations with realistic Large Magellanic Cloud analogs. 
 
