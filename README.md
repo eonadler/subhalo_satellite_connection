@@ -14,9 +14,10 @@ Code releases and accompanying papers:
 -- Contains tools for forward-modeling the population of DES and Pan-STARRS MW satellites.
 
 -- The healpix masks necessary to implement the DES and PS1 survey selection functions in V2 can downloaded using the following links. Please see https://github.com/des-science/mw-sats for additional information.
+
   DES mask: https://drive.google.com/file/d/1yF0pysai6rY13x17YY3KXZGVeDp25skz/view?usp=sharing
   PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view?usp=sharing
 
 ### Utils
 
--- Cntains tools for calculating the orbits of "orphan" (disrupted) subhalos in dark matter-only simulations, which are used in the V1 and V2 analyses, and tools for computing the likelihood of a satellite galaxy--subhalo connection model given an observed satellite population.
+-- Contains tools for calculating the orbits of "orphan" (disrupted) subhalos in dark matter-only simulations, which are used in the V1 and V2 analyses, and tools for computing the likelihood of a satellite galaxy--subhalo connection model given an observed satellite population.
