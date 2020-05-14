@@ -1,6 +1,7 @@
 import numpy as np
 import healpy as hp
 import fitsio
+from ssf import load_ssf
 from collections import OrderedDict as odict
 
 def ang2pix(nside, lon, lat, nest=False):
@@ -83,6 +84,16 @@ def read_map(filename, nest=False, hdu=None, h=False, verbose=True):
         return m, header
     else:
         return m
+
+
+def load_survey_masks(surveys):
+    masks = {}
+    ssfs = {}
+    for survey in surveys:
+        masks[survey] = load_mask(survey)
+        ssfs[survey] = load_ssf(survey)
+    return masks, ssfs
+
 
 def load_mask(survey):
     """

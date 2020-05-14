@@ -52,6 +52,7 @@ def load_ssf(survey):
     ssf.loadClassifier()
     ssf.load_map()
     return ssf
+    
 
 def apply_ssfs(satellite_properties, ssfs, size_cut=10., pc_to_kpc=1000., Mr_to_MV=-0.2):
     """
