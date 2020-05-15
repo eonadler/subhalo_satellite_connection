@@ -7,11 +7,49 @@ def get_combined_satellite_properties(halo_data,params,hparams,cosmo_params,vpea
     combined_satellite_properties = combine_satellite_properties(satellite_properties,orphan_satellite_properties)
     return combined_satellite_properties
 
+
 def combine_satellite_properties(satellite_properties,orphan_satellite_properties):
     combined_satellite_properties = {}
     for key in satellite_properties.keys():
         combined_satellite_properties[key] = np.concatenate((satellite_properties[key],orphan_satellite_properties[key]))
     return combined_satellite_properties
+
+
+def cut_subhalo_catalog(Halo_subs,hparams,cosmo_params):
+    mpeak_idx = (Halo_subs['mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>hparams['mpeak_cut'])
+    vpeak_idx = (Halo_subs['vpeak']>hparams['vpeak_cut'])
+    vmax_idx = (Halo_subs['vmax']>hparams['vmax_cut'])
+    cut_idx = mpeak_idx & vpeak_idx & vmax_idx
+    return Halo_subs[cut_idx], cut_idx
+
+
+def cut_orphan_subhalo_catalog(halo_data,hparams,cosmo_params):
+    Halo_subs = halo_data['orphan_catalog']
+    mpeak_idx = (halo_data['orphan_catalog_mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>hparams['mpeak_cut'])
+    radii_idx = Halo_subs[:,3] < hparams['orphan_radii_cut']
+    cut_idx = mpeak_idx & radii_idx
+    return Halo_subs[cut_idx], cut_idx
+
+
+def Mr_to_L(Mr,Mbol_sun=4.81):
+    return 10**((-1.*Mr + Mbol_sun)/2.5)
+
+
+def L_to_Mr(L,Mbol_sun=4.81):
+    return -1.*(2.5*(np.log10(L))-Mbol_sun)
+
+
+def draw_L(L,sigma_M):
+    return np.random.lognormal(np.log(L),(np.log(10)*sigma_M))
+
+
+def luminosity_from_vpeak(Vpeak,params,vpeak_Mr_interp):
+    sort_idx = np.argsort(np.argsort(Vpeak))
+    Mr_mean = vpeak_Mr_interp(Vpeak,params['alpha'])[sort_idx]
+    L_mean = Mr_to_L(Mr_mean)
+    L = draw_L(L_mean,params['sigma_M'])
+    return L_to_Mr(L)
+
 
 def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
     """
@@ -52,18 +90,9 @@ def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_inte
     #Define output dict
     satellite_properties = {}
     #Cut subhalo catalogs
-    Halo_subs = halo_data['Halo_subs']
-    mpeak_idx = (Halo_subs['mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>10**7)
-    vpeak_idx = (Halo_subs['vpeak']>hparams['vpeak_cut'])
-    vmax_idx = (Halo_subs['vmax']>hparams['vmax_cut'])
-    cut_idx = mpeak_idx & vpeak_idx & vmax_idx
-    Halo_subs_cut = Halo_subs[cut_idx]
+    Halo_subs_cut, cut_idx = cut_subhalo_catalog(halo_data['Halo_subs'],hparams,cosmo_params)
     #Calculate luminosities
-    sort_idx = np.argsort(np.argsort(Halo_subs_cut['vpeak']))
-    Mr_mean = vpeak_Mr_interp(Halo_subs_cut['vpeak'], params['alpha'])[sort_idx]
-    L_mean = 10**((-1.*Mr_mean + 4.81)/2.5 + np.log10(2))
-    L = np.random.lognormal(np.log(L_mean),(np.log(10)*params['sigma_M']))
-    satellite_properties['Mr'] = -1.*(2.5*(np.log10(L)-np.log10(2))-4.81)
+    satellite_properties['Mr'] = luminosity_from_vpeak(Halo_subs_cut['vpeak'],params,vpeak_Mr_interp)
     #Calculate positions
     Halo_main = halo_data['Halo_main']
     Halox = hparams['chi']*(Halo_subs_cut['x']-Halo_main[0]['x'])*(1000/cosmo_params['h'])
@@ -124,17 +153,9 @@ def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_
     #Define output dict
     orphan_satellite_properties = {}
     #Cut subhalo catalogs
-    Halo_subs = halo_data['orphan_catalog']
-    mpeak_idx = (halo_data['orphan_catalog_mpeak']*(1.-cosmo_params['omega_b']/cosmo_params['omega_m'])>10**7)
-    radii_idx = Halo_subs[:,3] < 300
-    cut_idx = mpeak_idx & radii_idx
-    Halo_subs_cut = Halo_subs[cut_idx]
+    Halo_subs_cut, cut_idx = cut_orphan_subhalo_catalog(halo_data,hparams,cosmo_params)
     #Calculate luminosities
-    sort_idx = np.argsort(np.argsort(Halo_subs_cut[:,5]))
-    Mr_mean = vpeak_Mr_interp(Halo_subs_cut[:,5], params['alpha'])[sort_idx]
-    L_mean = 10**((-1.*Mr_mean + 4.81)/2.5 + np.log10(2))
-    L = np.random.lognormal(np.log(L_mean),(np.log(10)*params['sigma_M']))
-    orphan_satellite_properties['Mr'] = -1.*(2.5*(np.log10(L)-np.log10(2))-4.81)
+    orphan_satellite_properties['Mr'] = luminosity_from_vpeak(Halo_subs_cut[:,5],params,vpeak_Mr_interp)
     #Calculate positions
     Halo_main = halo_data['Halo_main']
     Halox = hparams['chi']*(Halo_subs_cut[:,0]-(Halo_main[0]['x']*1000/cosmo_params['h']))

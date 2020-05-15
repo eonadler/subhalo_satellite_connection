@@ -20,8 +20,10 @@ def load_hyperparams():
 
     #hyperparameters
     hparams = {}
+    hparams['mpeak_cut'] = 10**7
     hparams['vpeak_cut'] = 10.
     hparams['vmax_cut'] = 9.
+    hparams['orphan_radii_cut'] = 300.
     hparams['chi'] = 1.
     hparams['R0'] = 10.0
     hparams['gamma_r'] = 0.0
