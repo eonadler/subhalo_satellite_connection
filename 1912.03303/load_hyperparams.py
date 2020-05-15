@@ -34,5 +34,5 @@ def load_hyperparams():
     orphan_params = {}
     orphan_params['eps'] = 0.01 
     orphan_params['df'] = 1
-    ###
+
     return hparams, cosmo_params, orphan_params, halo_data, vpeak_Mr_interp

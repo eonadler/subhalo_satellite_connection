@@ -70,11 +70,11 @@ def apply_ssfs(satellite_properties, ssfs, size_cut=10., pc_to_kpc=1000., Mr_to_
     """
     p_det = np.zeros(len(satellite_properties['Mr']), dtype='f8')
     r_sat = LA.norm(satellite_properties['rotated_pos'], axis=1)
-    p_disrupt = satellite_properties['prob']
+    p_surv = satellite_properties['prob']
     
     for survey in list(ssfs.keys()):
     	flags = satellite_properties['{}_flags'.format(survey)]
-    	p_det[flags] = (1.-p_disrupt[flags])*ssfs[survey].predict(distance=r_sat[flags],
+    	p_det[flags] = (p_surv[flags])*ssfs[survey].predict(distance=r_sat[flags],
 														    	  abs_mag=satellite_properties['Mr'][flags]+Mr_to_MV,
 														    	  r_physical=satellite_properties['r12'][flags]/pc_to_kpc,
 														    	  ra=satellite_properties['ra'][flags],

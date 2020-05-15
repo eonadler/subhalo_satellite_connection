@@ -24,6 +24,7 @@ def transform_to_observer_frame(pos,observer_ind,observer_distance=8.,observer_l
 
     return pos_observer_frame
 
+
 def rotate_about_vector(pos,vec1,vec2):
     """
     Returns heliocentric satellite position vectors transformed via a rotation matrix that rotates the mock LMC analog into its correct sky position
@@ -55,7 +56,8 @@ def rotate_about_vector(pos,vec1,vec2):
 
     return rotated_pos
 
-def get_lmc_coords(halo_data,cosmo_params,lmc_ind,lmc_true_sky_coords='05:23:34.5 -69:45.37'):
+
+def get_lmc_coords(halo_data,cosmo_params,lmc_ind,lmc_true_sky_coords='05:23:34.5 -69:45.37',Mpc_to_kpc=1000.):
     """
     Returns Cartesian coordinates of LMC analog assuming (a) it is fixed to the sky position of the true LMC, and (b) the true LMC is at the distance of the mock LMC
 
@@ -73,11 +75,12 @@ def get_lmc_coords(halo_data,cosmo_params,lmc_ind,lmc_true_sky_coords='05:23:34.
     lmc_analog = halo_data['Halo_subs'][lmc_ind]
 
     #Get LMC distance and perform coordinate transformation
-    lmc_distance = (1000./cosmo_params['h'])*np.sqrt((lmc_analog['x']-mw_analog['x'])**2+(lmc_analog['y']-mw_analog['y'])**2+(lmc_analog['z']-mw_analog['z'])**2)
-    lmc_sky_coords = SkyCoord(lmc_true_sky_coords, unit=(u.hourangle, u.deg), distance=lmc_distance*u.kpc)
+    lmc_distance = (Mpc_to_kpc/cosmo_params['h'])*np.sqrt((lmc_analog['x']-mw_analog['x'])**2+(lmc_analog['y']-mw_analog['y'])**2+(lmc_analog['z']-mw_analog['z'])**2)
+    lmc_sky_coords = SkyCoord(lmc_true_sky_coords,unit=(u.hourangle, u.deg),distance=lmc_distance*u.kpc)
     lmc_cartesian_coords = np.array(lmc_sky_coords.cartesian.xyz)
 
     return lmc_cartesian_coords
+
 
 def rotate_about_LMC(satellite_properties,halo_data,cosmo_params,lmc_cartesian_coords,lmc_ind,observer_ind):
     """

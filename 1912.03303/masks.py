@@ -11,6 +11,7 @@ def ang2pix(nside, lon, lat, nest=False):
     theta = np.radians(90. - lat)
     phi = np.radians(lon)
     return hp.ang2pix(nside, theta, phi, nest=nest)
+    
 
 def read_map(filename, nest=False, hdu=None, h=False, verbose=True):
     """Read a healpix map from a fits file.  Partial-sky files,
