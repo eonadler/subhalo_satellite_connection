@@ -1,5 +1,20 @@
 import pickle
 
+def load_params(param_vector=[]):
+    """
+    Casts vector of parameters into dictionary
+    """
+    params = {}
+    param_vector_default = [-1.43,0.05,7.5,0.05,1.,40.,0.6,1.]
+
+    if len(param_vector) != 0:
+        params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'] = param_vector
+    else:
+        params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'] = param_vector_default
+
+    return params
+
+
 def load_hyperparams():
     """
     Returns hyperparameters, cosmological parameters, and loads data for predict_satellites.py and predict_orphans.py
@@ -29,10 +44,16 @@ def load_hyperparams():
     hparams['gamma_r'] = 0.0
     hparams['beta'] = 0.
     hparams['O'] = 1.
+    hparams['n_realizations'] = 5
 
     #Orphan hyperparameters
     orphan_params = {}
     orphan_params['eps'] = 0.01 
     orphan_params['df'] = 1
 
-    return hparams, cosmo_params, orphan_params, halo_data, vpeak_Mr_interp
+    #Simulation and LMC indices
+    sim_indices = {}
+    sim_indices['host'] = [14]
+    sim_indices['LMC'] = [0]
+
+    return hparams, cosmo_params, orphan_params, halo_data, sim_indices, vpeak_Mr_interp

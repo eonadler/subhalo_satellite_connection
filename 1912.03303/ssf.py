@@ -8,7 +8,7 @@ import xgboost as xgb
 
 class surveySelectionFunction:
     
-    def __init__(self, config_file):
+    def __init__(self,config_file):
         self.config = yaml.load(open(config_file))
         self.algorithm = self.config['operation']['algorithm']
         self.classifier = None
@@ -24,7 +24,7 @@ class surveySelectionFunction:
         self.classifier = xgb.XGBClassifier({'nthread': 4})
         self.classifier.load_model(self.config[self.algorithm]['classifier'])
         
-    def predict(self, **kwargs):
+    def predict(self,**kwargs):
         assert self.classifier is not None, 'ERROR'
         ra  = kwargs.pop('ra',None)
         dec = kwargs.pop('dec',None)
@@ -54,7 +54,7 @@ def load_ssf(survey):
     return ssf
     
 
-def apply_ssfs(satellite_properties, ssfs, size_cut=10., pc_to_kpc=1000., Mr_to_MV=-0.2):
+def apply_ssfs(satellite_properties,ssfs,size_cut=10.,pc_to_kpc=1000.,Mr_to_MV=-0.2,surveys=['des','ps1']):
     """
     Calculates each satellite's contribution to the observed population as (1. - disruption probability) x (observational detection probability)
 
@@ -72,7 +72,7 @@ def apply_ssfs(satellite_properties, ssfs, size_cut=10., pc_to_kpc=1000., Mr_to_
     r_sat = LA.norm(satellite_properties['rotated_pos'], axis=1)
     p_surv = satellite_properties['prob']
     
-    for survey in list(ssfs.keys()):
+    for survey in surveys:
     	flags = satellite_properties['{}_flags'.format(survey)]
     	p_det[flags] = (p_surv[flags])*ssfs[survey].predict(distance=r_sat[flags],
 														    	  abs_mag=satellite_properties['Mr'][flags]+Mr_to_MV,

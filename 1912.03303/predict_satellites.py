@@ -74,10 +74,25 @@ def L_to_Mr(L,Mbol_sun=4.81):
         L (array of floats): luminosity values
 
     Returns:
-        Mr (array of floats): absolute magnitude valuees
+        Mr (array of floats): absolute magnitude values
     """
     Mr = -1.*(2.5*(np.log10(L))-Mbol_sun)
     return Mr
+
+
+def Mr_to_mu(Mr,r12,pc_to_kpc=1000.):
+    """
+    Conversion from absolute magnitude and half-light radius to surface brightness
+
+    Args:
+        Mr (array of floats): absolute magnitude values
+        r12 (array of floats): half-light radii (units of pc)
+
+    Returns:
+        mu (array of floats): surface brightness values
+    """
+    mu = Mr + 36.57+ 2.5*np.log10(2*np.pi*((r12/pc_to_kpc)**2))
+    return mu
 
 
 def draw_L(L,sigma_M):
@@ -246,6 +261,7 @@ def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_inte
 
     #Calculate sizes
     satellite_properties['r12'] = get_satellite_sizes(halo_data['rvir'][cut_idx],halo_data['rs'][cut_idx],halo_data['Halo_subs_cut'],params,hparams,cosmo_params)
+    satellite_properties['mu'] = Mr_to_mu(satellite_properties['Mr'],satellite_properties['r12'])
 
     #Calculate disruption probability due to baryonic effects and occupation fraction
     satellite_properties['prob'] = get_survival_prob(halo_data['Halo_ML_prob'][cut_idx],halo_data['Halo_subs_cut']['mpeak'],params,cosmo_params)
@@ -312,6 +328,7 @@ def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_
     beta_correction = ((Halo_subs_cut[:,4]/Halo_subs_cut[:,9]).clip(max=1.0))**hparams['beta']
     Halo_r12 = params['A']*c_correction*beta_correction*((halo_data['rvir_orphan'][cut_idx]/(hparams['R0']*0.702))**params['n'])
     orphan_satellite_properties['r12'] = np.random.lognormal(np.log(Halo_r12),np.log(10)*params['sigma_r'])
+    orphan_satellite_properties['mu'] = Mr_to_mu(orphan_satellite_properties['Mr'],orphan_satellite_properties['r12'])
 
     #Calculate disruption probability due to baryonic effects and occupation fraction
     baryonic_disruption_prob = (1.-halo_data['orphan_aacc'][cut_idx])**(hparams['O'])

@@ -4,7 +4,7 @@ import fitsio
 from ssf import load_ssf
 from collections import OrderedDict as odict
 
-def ang2pix(nside, lon, lat, nest=False):
+def ang2pix(nside,lon,lat,nest=False):
     """
     Input (lon, lat) in degrees instead of (theta, phi) in radians
     """
@@ -13,7 +13,7 @@ def ang2pix(nside, lon, lat, nest=False):
     return hp.ang2pix(nside, theta, phi, nest=nest)
     
 
-def read_map(filename, nest=False, hdu=None, h=False, verbose=True):
+def read_map(filename,nest=False,hdu=None,h=False,verbose=True):
     """Read a healpix map from a fits file.  Partial-sky files,
     if properly identified, are expanded to full size and filled with UNSEEN.
     Uses fitsio to mirror much (but not all) of the functionality of healpy.read_map
@@ -87,7 +87,7 @@ def read_map(filename, nest=False, hdu=None, h=False, verbose=True):
         return m
 
 
-def load_survey_masks(surveys):
+def load_survey_masks(surveys=['des','ps1']):
     masks = {}
     ssfs = {}
     for survey in surveys:
@@ -115,7 +115,7 @@ def load_mask(survey):
     return indices
 
 
-def evaluate_mask(ra, dec, indices, survey, cut_footprint=True, cut_ebv=True, cut_associate=True, cut_bsc=True, cut_dwarfs=True, dwarftype='2'):
+def evaluate_mask(ra,dec,indices,survey,cut_footprint=True,cut_ebv=True,cut_associate=True,cut_bsc=True,cut_dwarfs=True,dwarftype='2'):
     """
     Applies selection masks from https://arxiv.org/abs/1912.03302 to simulation data
 
