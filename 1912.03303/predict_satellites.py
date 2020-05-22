@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.special import erf
 
-def get_combined_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
+def get_combined_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp,suppression):
     """
     Combines properties of satellites and orphans
 
@@ -15,8 +15,8 @@ def get_combined_satellite_properties(halo_data,params,hparams,cosmo_params,vpea
     Returns:
         combined_satellite_properties (dict): dict containing combined properties of satellites and orphans
     """
-    satellite_properties = get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp)
-    orphan_satellite_properties = get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp)
+    satellite_properties = get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp,suppression)
+    orphan_satellite_properties = get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp,suppression)
     combined_satellite_properties = {}
     for key in satellite_properties.keys():
         combined_satellite_properties[key] = np.concatenate((satellite_properties[key],orphan_satellite_properties[key]))
@@ -188,11 +188,25 @@ def occupation_fraction(Mpeak,params,cosmo_params):
     Returns:
         fgal (array of floats): probability that each subhalo hosts a satellite
     """
-    fgal = (0.5*(1.+erf((np.log10(Mpeak*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak'])))).clip(max=1.)
+    fgal = (0.5*(1.+erf((np.log10((Mpeak/cosmo_params['h'])*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak'])))).clip(max=1.)
     return fgal
 
 
-def get_survival_prob(ML_prob,Mpeak,params,cosmo_params):
+def wdm_shmf_suppression(Mpeak,params,cosmo_params,lovell_new=False,lovell_alt=False,schneider=False):
+	if lovell_new==True:
+		return (1+(4.2*(10**params['Mhm'])/(Mpeak/cosmo_params['h']))**2.5)**-0.2
+
+	elif lovell_alt==True:
+		return (1+(10**params['Mhm'])/(Mpeak/cosmo_params['h']))**-1.3
+
+	elif schneider==True:
+		return (1+(10**params['Mhm'])/(Mpeak/cosmo_params['h']))**-1.16
+
+	else:
+		return (1+2.7*(10**params['Mhm'])/(Mpeak/cosmo_params['h']))**-0.99
+
+
+def get_survival_prob(ML_prob,Mpeak,params,cosmo_params,suppression):
     """
     Gets satellite survival probability
 
@@ -208,10 +222,14 @@ def get_survival_prob(ML_prob,Mpeak,params,cosmo_params):
     baryonic_disruption_prob = ML_prob**(1./params['B'])
     occupation_prob = occupation_fraction(Mpeak,params,cosmo_params)
     prob = (1.-baryonic_disruption_prob)*occupation_prob
+
+    if suppression == 'wdm':
+    	prob *= wdm_shmf_suppression(Mpeak,params,cosmo_params)
+
     return prob
 
 
-def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
+def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp,suppression):
     """
     Returns properties of luminous satellites corresponding to surviving subhalos at z=0 in a DMO zoom-in simulation
 
@@ -264,12 +282,12 @@ def get_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_inte
     satellite_properties['mu'] = Mr_to_mu(satellite_properties['Mr'],satellite_properties['r12'])
 
     #Calculate disruption probability due to baryonic effects and occupation fraction
-    satellite_properties['prob'] = get_survival_prob(halo_data['Halo_ML_prob'][cut_idx],halo_data['Halo_subs_cut']['mpeak'],params,cosmo_params)
+    satellite_properties['prob'] = get_survival_prob(halo_data['Halo_ML_prob'][cut_idx],halo_data['Halo_subs_cut']['mpeak'],params,cosmo_params,suppression)
 
     return satellite_properties
 
 
-def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp):
+def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_Mr_interp,suppression):
     """
     Returns properties of luminous orphan satellites corresponding to disrupted subhalos that have been tracked to z=0 in a DMO zoom-in simulation
 
@@ -332,7 +350,9 @@ def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_
 
     #Calculate disruption probability due to baryonic effects and occupation fraction
     baryonic_disruption_prob = (1.-halo_data['orphan_aacc'][cut_idx])**(hparams['O'])
-    occupation_prob = (0.5*(1.+erf((np.log10(halo_data['orphan_catalog_mpeak'][cut_idx]*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak'])))).clip(max=1.)
+    occupation_prob = (0.5*(1.+erf((np.log10((halo_data['orphan_catalog_mpeak'][cut_idx]/cosmo_params['h'])*(1-cosmo_params['omega_b']/cosmo_params['omega_m']))-params['M50'])/(np.sqrt(2)*params['sigma_mpeak'])))).clip(max=1.)
     orphan_satellite_properties['prob'] = (1.-baryonic_disruption_prob)*occupation_prob
+    if suppression=='wdm':
+    	orphan_satellite_properties['prob'] *= wdm_shmf_suppression(halo_data['orphan_catalog_mpeak'][cut_idx],params,cosmo_params)
 
     return orphan_satellite_properties

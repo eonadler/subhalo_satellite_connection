@@ -5,12 +5,12 @@ def load_params(param_vector=[]):
     Casts vector of parameters into dictionary
     """
     params = {}
-    param_vector_default = [-1.43,0.05,7.5,0.05,1.,40.,0.6,1.]
+    param_vector_default = [-1.43,0.05,7.5,0.05,1.,40.,0.6,1.,0.]
 
     if len(param_vector) != 0:
-        params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'] = param_vector
+        params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'], params['Mhm'] = param_vector
     else:
-        params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'] = param_vector_default
+        params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'], params['Mhm'] = param_vector_default
 
     return params
 

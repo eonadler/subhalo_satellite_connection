@@ -19,7 +19,7 @@ def transform_to_sky_coords(rotated_pos):
     return Halo_sky_coord.lon.degree, Halo_sky_coord.lat.degree
 
 
-def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,surveys=['des','ps1']):
+def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,suppression,surveys=['des','ps1']):
     #Set parameters
     params = load_params(param_vector)
 
@@ -43,7 +43,7 @@ def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_d
             for k in range(6):
                 #Get satellite properties
                 combined_satellite_properties = get_combined_satellite_properties(halo_data[sim_indices['host'][i]], 
-                                                                                  params, hparams, cosmo_params, vpeak_Mr_interp)
+                                                                                  params, hparams, cosmo_params, vpeak_Mr_interp,suppression)
                 #Rotate about LMC
                 lmc_cartesian_coords = get_lmc_coords(halo_data[sim_indices['host'][i]],
                                                       cosmo_params,
@@ -75,10 +75,10 @@ def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_d
     return combined_satellite_properties_list, mock_counts
 
 
-def evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,surveys=['des','ps1']):
+def evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1']):
     true_counts = get_true_counts(surveys)
     combined_satellite_properties_list, mock_counts = satellite_realization(param_vector,hparams,cosmo_params,orphan_params,
-                                                                            halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs)
+                                                                            halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,suppression)
 
     ln_like = 0.
 
