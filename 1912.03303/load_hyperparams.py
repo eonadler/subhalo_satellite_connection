@@ -1,11 +1,12 @@
 import pickle
+import numpy as np
 
 def load_params(param_vector=[]):
     """
     Casts vector of parameters into dictionary
     """
     params = {}
-    param_vector_default = [-1.43,0.05,7.5,0.05,1.,40.,0.6,1.,0.]
+    param_vector_default = [-1.43,0.05,7.5,0.05,1.,40.,0.6,1.,5.5]
 
     if len(param_vector) != 0:
         params['alpha'], params['sigma_M'], params['M50'], params['sigma_mpeak'], params['B'], params['A'], params['sigma_r'], params['n'], params['Mhm'] = param_vector
@@ -46,6 +47,18 @@ def load_hyperparams():
     hparams['O'] = 1.
     hparams['n_realizations'] = 5
 
+    #prior hyperparameters
+    prior_hparams = {}
+    prior_hparams['alpha'] = np.array([-2.,-1.1])
+    prior_hparams['sigma_M'] = np.array([0.,2.])
+    prior_hparams['M50'] = np.array([7.35,10.85])
+    prior_hparams['sigma_mpeak'] = np.array([1e-5,1.])
+    prior_hparams['B'] = np.array([1e-5,3.])
+    prior_hparams['A'] = np.array([10.,500.])
+    prior_hparams['sigma_r'] = np.array([1e-5,2.])
+    prior_hparams['n'] = np.array([0.,2.])
+    prior_hparams['Mhm'] = np.array([5.,9.])
+
     #Orphan hyperparameters
     orphan_params = {}
     orphan_params['eps'] = 0.01 
@@ -56,4 +69,4 @@ def load_hyperparams():
     sim_indices['host'] = [14]
     sim_indices['LMC'] = [0]
 
-    return hparams, cosmo_params, orphan_params, halo_data, sim_indices, vpeak_Mr_interp
+    return hparams, prior_hparams, cosmo_params, orphan_params, halo_data, sim_indices, vpeak_Mr_interp

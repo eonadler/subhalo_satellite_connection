@@ -3,6 +3,9 @@ import sys
 sys.path.append('../utils')
 
 #Imports
+import numpy as np
+import emcee 
+import progressbar
 from load_hyperparams import load_params
 from predict_satellites import get_combined_satellite_properties
 from fix_lmc_coords import get_lmc_coords, rotate_about_LMC
@@ -87,3 +90,44 @@ def evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_
         ln_like += ln_marginalized_poisson_likelihood(true_counts['{}_dim_mu_split'.format(survey)],mock_counts['{}_dim_mu_split'.format(survey)])
 
     return ln_like
+
+
+def evaluate_ln_prior(param_vector,prior_hparams):
+    prior_hparams_array = np.array(list(prior_hparams.values()))
+    for i in range(len(param_vector)):
+        if np.logical_and(param_vector[i]>prior_hparams_array[i][0],param_vector[i]<prior_hparams_array[i][1]):
+            continue
+        else:
+            return -np.inf
+
+    return np.log(1.0/(1.0+(param_vector[0]**2)))- ((np.log(param_vector[4]))**2)/(2*(0.5**2)) - ((param_vector[7]-1)**2)/(2*(0.5**2))
+
+
+def evaluate_ln_post(param_vector,hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1']):
+    ln_prior = evaluate_ln_prior(param_vector,prior_hparams)
+    if np.isinf(ln_prior):
+        return ln_prior
+    
+    ln_like = evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1'])
+    ln_post = ln_like + ln_prior
+
+    return ln_post
+
+
+def mcmc(param_vector,hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1']):
+    ndim = len(param_vector)
+    nwalkers = 4*ndim
+
+    p0 = param_vector + 0.1*np.random.rand(ndim * nwalkers).reshape((nwalkers, ndim))
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, evaluate_ln_post, args=[hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression,surveys])
+    
+    n_steps = 1000
+    bar = progressbar.ProgressBar(n_steps).start()
+    bar.update(0)
+
+    for i,res in enumerate(sampler.sample(p0, iterations=n_steps)):
+        bar.update(i+1)
+
+    samples = sampler.chain[:, :, :].reshape((-1, ndim))
+
+    return samples
