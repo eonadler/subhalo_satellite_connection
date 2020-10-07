@@ -43,42 +43,44 @@ def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_d
         #Loop over realizations of model at fixed parameters
         for j in range(hparams['n_realizations']):
             #Loop over observer locations
-            for k in range(6):
-                #Get satellite properties
-                combined_satellite_properties = get_combined_satellite_properties(halo_data[sim_indices['host'][i]], 
-                                                                                  params, hparams, cosmo_params, vpeak_Mr_interp,suppression)
-                #Rotate about LMC
-                lmc_cartesian_coords = get_lmc_coords(halo_data[sim_indices['host'][i]],
-                                                      cosmo_params,
-                                                      sim_indices['LMC'][i])
-                combined_satellite_properties_rotated = rotate_about_LMC(combined_satellite_properties,
-                                                                         halo_data[sim_indices['host'][i]],
-                                                                         cosmo_params,lmc_cartesian_coords,
-                                                                         sim_indices['LMC'][i],k)
-                #Transform to sky coordinates
-                combined_satellite_properties_rotated['ra'], combined_satellite_properties_rotated['dec'] = transform_to_sky_coords(combined_satellite_properties_rotated['rotated_pos'])
-                #Assign flags 
-                for survey in surveys:
-                    combined_satellite_properties_rotated['{}_flags'.format(survey)] = evaluate_mask(combined_satellite_properties_rotated['ra'],
+            #for k in range(6):
+            k = np.random.randint(0,6)
+            #Get satellite properties
+            combined_satellite_properties = get_combined_satellite_properties(halo_data[sim_indices['host'][i]], 
+                                                                                params, hparams, cosmo_params, vpeak_Mr_interp,suppression)
+            #Rotate about LMC
+            lmc_cartesian_coords = get_lmc_coords(halo_data[sim_indices['host'][i]],
+                                                    cosmo_params,
+                                                    sim_indices['LMC'][i])
+            combined_satellite_properties_rotated = rotate_about_LMC(combined_satellite_properties,
+                                                                        halo_data[sim_indices['host'][i]],
+                                                                        cosmo_params,lmc_cartesian_coords,
+                                                                        sim_indices['LMC'][i],k)
+            #Transform to sky coordinates
+            combined_satellite_properties_rotated['ra'], combined_satellite_properties_rotated['dec'] = transform_to_sky_coords(combined_satellite_properties_rotated['rotated_pos'])
+            #Assign flags 
+            for survey in surveys:
+                combined_satellite_properties_rotated['{}_flags'.format(survey)] = evaluate_mask(combined_satellite_properties_rotated['ra'],
                                                                                             combined_satellite_properties_rotated['dec'],
                                                                                             masks[survey], survey)
-                combined_satellite_properties_rotated['ps1_flags'][combined_satellite_properties_rotated['des_flags']==True] = False
-                #Apply ssfs
-                combined_satellite_properties_rotated['pdet'] = apply_ssfs(combined_satellite_properties_rotated,ssfs)
-                #Append satellite realizations
-                combined_satellite_properties_list.append(combined_satellite_properties_rotated)
-                #Append counts
-                for survey in surveys:
-                    bright_mu_split, dim_mu_split = count_Mr_split(combined_satellite_properties_rotated['Mr'][combined_satellite_properties_rotated['{}_flags'.format(survey)]],
-                                                                   combined_satellite_properties_rotated['mu'][combined_satellite_properties_rotated['{}_flags'.format(survey)]],
-                                                                   combined_satellite_properties_rotated['pdet'][combined_satellite_properties_rotated['{}_flags'.format(survey)]])
-                    mock_counts['{}_bright_mu_split'.format(survey)].append(bright_mu_split)
-                    mock_counts['{}_dim_mu_split'.format(survey)].append(dim_mu_split)
+            combined_satellite_properties_rotated['ps1_flags'][combined_satellite_properties_rotated['des_flags']==True] = False
+            #Apply ssfs
+            combined_satellite_properties_rotated['pdet'] = apply_ssfs(combined_satellite_properties_rotated,ssfs)
+            #Append satellite realizations
+            combined_satellite_properties_list.append(combined_satellite_properties_rotated)
+            #Append counts
+            for survey in surveys:
+                bright_mu_split, dim_mu_split = count_Mr_split(combined_satellite_properties_rotated['Mr'][combined_satellite_properties_rotated['{}_flags'.format(survey)]],
+                                                                combined_satellite_properties_rotated['mu'][combined_satellite_properties_rotated['{}_flags'.format(survey)]],
+                                                                combined_satellite_properties_rotated['pdet'][combined_satellite_properties_rotated['{}_flags'.format(survey)]])
+                mock_counts['{}_bright_mu_split'.format(survey)].append(bright_mu_split)
+                mock_counts['{}_dim_mu_split'.format(survey)].append(dim_mu_split)
 
     return combined_satellite_properties_list, mock_counts
 
 
-def evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1']):
+def evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,
+    suppression='cdm',surveys=['des','ps1']):
     true_counts = get_true_counts(surveys)
     combined_satellite_properties_list, mock_counts = satellite_realization(param_vector,hparams,cosmo_params,orphan_params,
                                                                             halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,suppression)
@@ -103,12 +105,14 @@ def evaluate_ln_prior(param_vector,prior_hparams):
     return np.log(1.0/(1.0+(param_vector[0]**2)))- ((np.log(param_vector[4]))**2)/(2*(0.5**2)) - ((param_vector[7]-1)**2)/(2*(0.5**2))
 
 
-def evaluate_ln_post(param_vector,hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1']):
+def evaluate_ln_post(param_vector,hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,
+    suppression='cdm',surveys=['des','ps1']):
     ln_prior = evaluate_ln_prior(param_vector,prior_hparams)
     if np.isinf(ln_prior):
         return ln_prior
     
-    ln_like = evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression='cdm',surveys=['des','ps1'])
+    ln_like = evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,
+        suppression='cdm',surveys=['des','ps1'])
     ln_post = ln_like + ln_prior
 
     return ln_post
@@ -118,8 +122,9 @@ def mcmc(param_vector,hparams,prior_hparams,cosmo_params,orphan_params,halo_data
     ndim = len(param_vector)
     nwalkers = 4*ndim
 
-    p0 = param_vector + 0.1*np.random.rand(ndim * nwalkers).reshape((nwalkers, ndim))
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, evaluate_ln_post, args=[hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression,surveys])
+    p0 = param_vector + 0.1*np.random.rand(ndim*nwalkers).reshape((nwalkers,ndim))
+    sampler = emcee.EnsembleSampler(nwalkers,ndim,evaluate_ln_post,args=[hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,
+        masks,ssfs,true_counts,suppression,surveys])
     
     n_steps = 1000
     bar = progressbar.ProgressBar(n_steps).start()

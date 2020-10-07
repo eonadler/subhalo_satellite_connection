@@ -66,7 +66,7 @@ def load_hyperparams():
 
     #Simulation and LMC indices
     sim_indices = {}
-    sim_indices['host'] = [14]
-    sim_indices['LMC'] = [0]
+    sim_indices['host'] = [0,1]
+    sim_indices['LMC'] = [0,0]
 
     return hparams, prior_hparams, cosmo_params, orphan_params, halo_data, sim_indices, vpeak_Mr_interp
