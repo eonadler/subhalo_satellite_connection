@@ -111,8 +111,8 @@ def evaluate_ln_post(param_vector,hparams,prior_hparams,cosmo_params,orphan_para
     if np.isinf(ln_prior):
         return ln_prior
     
-    ln_like = evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,
-        suppression='cdm',surveys=['des','ps1'])
+    ln_like = evaluate_ln_likelihood(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,true_counts,suppression,
+    	surveys=['des','ps1'])
     ln_post = ln_like + ln_prior
 
     return ln_post
@@ -126,7 +126,7 @@ def mcmc(param_vector,hparams,prior_hparams,cosmo_params,orphan_params,halo_data
     sampler = emcee.EnsembleSampler(nwalkers,ndim,evaluate_ln_post,args=[hparams,prior_hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,
         masks,ssfs,true_counts,suppression,surveys])
     
-    n_steps = 1000
+    n_steps = 10000
     bar = progressbar.ProgressBar(n_steps).start()
     bar.update(0)
 
