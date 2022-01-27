@@ -141,12 +141,12 @@ def get_halocentric_positions(Halo_main,Halo_subs_cut,hparams,cosmo_params,Mpc_t
         cosmo_params (dict): dict containing cosmological parameters
 
     Returns:
-        radii (array): subhalo halocentric radii in kpc
+        radii (array): subhalo halocentric radii in kpc, scaled according to hparam['chi']
         pos (array): subhalo halocentric Cartesian coordinates in kpc
     """
-    Halox = hparams['chi']*(Halo_subs_cut['x']-Halo_main[0]['x'])*(Mpc_to_kpc/cosmo_params['h'])
-    Haloy = hparams['chi']*(Halo_subs_cut['y']-Halo_main[0]['y'])*(Mpc_to_kpc/cosmo_params['h'])
-    Haloz = hparams['chi']*(Halo_subs_cut['z']-Halo_main[0]['z'])*(Mpc_to_kpc/cosmo_params['h'])
+    Halox = (Halo_subs_cut['x']-Halo_main[0]['x'])*(Mpc_to_kpc/cosmo_params['h'])
+    Haloy = (Halo_subs_cut['y']-Halo_main[0]['y'])*(Mpc_to_kpc/cosmo_params['h'])
+    Haloz = (Halo_subs_cut['z']-Halo_main[0]['z'])*(Mpc_to_kpc/cosmo_params['h'])
     radii = np.sqrt(Halox**2 + Haloy**2 + Haloz**2)*hparams['chi']
     pos = np.vstack((Halox,Haloy,Haloz)).T
     return radii, pos
