@@ -108,7 +108,7 @@ def leapfrog(step,tlookback,deltat,sub_properties,host_properties,ax,ay,az,sigma
             logLambda += 1.04*(mu_i**(0.64))*(eta**(0.72))*np.exp(-3.02*epsilon) - 0.75
             ax, ay, az = get_acceleration(Menc,host_properties,rho_host,sub_properties,eps,logLambda,Xratio)
             if (np.sqrt((sub_properties['x']-host_properties['x'])**2 + (sub_properties['y']-host_properties['y'])**2 + (sub_properties['z']-host_properties['z'])**2) > sub_properties['ri']):
-                delta_mvir = 1.18*sub_properties['mvir']*((sub_properties['mvir']/(host_properties['mvir'])**(0.07))/tau
+                delta_mvir = 1.18*sub_properties['mvir']*((sub_properties['mvir']/(host_properties['mvir']))**(0.07))/tau
                 sub_properties['mvir'] -= delta_mvir
                 sub_properties['vmax'] += delta_mvir*(sub_properties['vmax']/sub_properties['mvir'])*(0.3 - 0.4*sub_properties['mvir']/(sub_properties['mvir'] + sub_properties['macc']))
                 test += 1
