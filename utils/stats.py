@@ -42,3 +42,21 @@ def ln_marginalized_poisson_likelihood(count_binned,rate_binned):
         ln_marginalized_like += marginalized_poisson_likelihood(k, m)
 
     return ln_marginalized_like
+    
+
+def marginalized_like_vectorized(k, m):
+    """
+    Returns Poisson likelihood in a single parameter space bin, following marginalized_poisson_likelihood, with multiple realizations accounted for to improve vectorization
+
+    Args:
+    k (int): number of observed events in parameter space bin
+    m (vector of floats): vector of predicted observations in parameter space bin for multiple realizations of model
+
+    Returns:
+    marginalized_like (float): likelihood of observing k events given vector m of event realizations in single parameter space bin
+    """
+    sum_m = np.sum(m, axis=0)
+    nr, nh, nc, nb = m.shape
+    marginalized_like_vectorized = (-1.*(1. + sum_m)*np.log((1. + nr)/nr) - k*np.log(1. + nr)+ loggamma(sum_m + k + 1.) - loggamma(sum_m + 1.) - loggamma(1. + k))
+
+    return marginalized_like_vectorized
