@@ -21,8 +21,16 @@ PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view
 
 ### [2401.10318]((https://arxiv.org/abs/2401.10318)): Forecasts for Galaxy Formation and Dark Matter Constraints from Dwarf Galaxy Surveys.
 
--- ...
+** Under construction **
+
+-- Implements the satellite galaxy--subhalo connection model and inference evaluated on mock halo catalogs, for various galaxy formation, WDM, and SHMF models
+
+-- Improves vectorization of MCMC evaluation for MPI runs
 
 ### Utils
 
 -- Contains tools for calculating the orbits of "orphan" (disrupted) subhalos in dark matter-only simulations, which are used in the V1 and V2 analyses, and tools for computing the likelihood of a satellite galaxy--subhalo connection model given an observed satellite population.
+
+### Data
+
+-- Contains zoom-in subhalo catalogs, abundance matching interpolator, and Milky Way satellite data
