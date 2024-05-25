@@ -21,8 +21,6 @@ PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view
 
 ### [2401.10318](https://arxiv.org/abs/2401.10318): Forecasts for Galaxy Formation and Dark Matter Constraints from Dwarf Galaxy Surveys.
 
-**Under construction**
-
 -- Implements the satellite galaxy--subhalo connection model and inference evaluated on mock halo catalogs, for various galaxy formation, WDM, and SHMF models
 
 -- Improves vectorization of MCMC evaluation for MPI runs
