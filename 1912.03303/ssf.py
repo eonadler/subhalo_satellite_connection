@@ -9,7 +9,7 @@ import xgboost as xgb
 class surveySelectionFunction:
     
     def __init__(self,config_file):
-        self.config = yaml.load(open(config_file))
+        self.config = yaml.safe_load(open(config_file))
         self.algorithm = self.config['operation']['algorithm']
         self.classifier = None
         self.loadClassifier()
