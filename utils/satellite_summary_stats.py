@@ -9,7 +9,7 @@ def count_Mr(Mr,bins,prob,Mr_max):
         Mr_max (float): dimmest magnitude considered
     
     Returns:
-        Numbre of detected satellites in each magnitude bin.
+        Number of detected satellites in each magnitude bin.
     """
     idx = np.isfinite(Mr)
     idx_in_bins = (Mr>=bins[0]) & (Mr<=bins[-1]) & (Mr<=Mr_max)
