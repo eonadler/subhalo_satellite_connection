@@ -9,7 +9,7 @@ import xgboost as xgb
 class surveySelectionFunction:
     
     def __init__(self,config_file):
-        self.config = yaml.safe_load(open(config_file))
+        self.config = yaml.load(open(config_file), Loader=yaml.SafeLoader)
         self.algorithm = self.config['operation']['algorithm']
         self.classifier = None
         self.loadClassifier()
@@ -47,7 +47,17 @@ def load_ssf(survey):
     """
     Returns appropriate survey selection function from https://arxiv.org/abs/1912.03302
     """
-    config_file = '../Classifier/des_y3a2_survey_selection_function-{}-density.yaml'.format(survey)
+    if survey in ['des','ps1']:
+        config_file = '../Classifier/des_y3a2_survey_selection_function-{}-density.yaml'.format(survey)
+    elif survey in ['lsst', 'lsst_v6', 'lsst_meas', 'lsst_measured']:
+        config_file = '../Classifier/lsst_dc2_survey_selection_function-v6.yaml'.format(survey)
+    elif survey in ['lsst_v6_corr', 'lsst_meas_corr','lsst_measured_high_sig']:
+        config_file = '../Classifier/lsst_dc2_survey_selection_function-v6_corr.yaml'.format(survey)
+    elif survey in ['lsst_v7', 'lsst_ideal', 'lsst_idealized']:
+        config_file = '../Classifier/lsst_dc2_survey_selection_function-v7.yaml'.format(survey)
+    else:
+        raise Exception(f"Unrecognized survey: {survey}")
+    
     ssf = surveySelectionFunction(config_file)
     ssf.loadClassifier()
     ssf.load_map()
@@ -75,10 +85,10 @@ def apply_ssfs(satellite_properties,ssfs,size_cut=10.,pc_to_kpc=1000.,Mr_to_MV=-
     for survey in surveys:
     	flags = satellite_properties['{}_flags'.format(survey)]
     	p_det[flags] = (p_surv[flags])*ssfs[survey].predict(distance=r_sat[flags],
-														    	  abs_mag=satellite_properties['Mr'][flags]+Mr_to_MV,
-														    	  r_physical=satellite_properties['r12'][flags]/pc_to_kpc,
-														    	  ra=satellite_properties['ra'][flags],
-														    	  dec=satellite_properties['dec'][flags])
+							    abs_mag=satellite_properties['Mr'][flags]+Mr_to_MV,
+							    r_physical=satellite_properties['r12'][flags]/pc_to_kpc,
+							    ra=satellite_properties['ra'][flags],
+							    dec=satellite_properties['dec'][flags])
     
     #Enforce star cluster cut
     p_det[satellite_properties['r12'] < size_cut] = 0.
