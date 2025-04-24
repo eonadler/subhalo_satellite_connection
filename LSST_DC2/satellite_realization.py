@@ -63,9 +63,12 @@ def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_d
                 combined_satellite_properties_rotated['{}_flags'.format(survey)] = evaluate_mask(combined_satellite_properties_rotated['ra'],
                                                                                             combined_satellite_properties_rotated['dec'],
                                                                                             masks[survey], survey)
-            combined_satellite_properties_rotated['ps1_flags'][combined_satellite_properties_rotated['des_flags']==True] = False
-            #Apply ssfs
-            combined_satellite_properties_rotated['pdet'] = apply_ssfs(combined_satellite_properties_rotated,ssfs)
+            #Remove PS1 satellites that are also in DES
+            if 'ps1' in surveys and 'des' in surveys:
+                combined_satellite_properties_rotated['ps1_flags'][combined_satellite_properties_rotated['des_flags']==True] = False
+                
+            #Apply ssfs (loops over all surveys, so survey flags must yield unique object sets)
+            combined_satellite_properties_rotated['pdet'] = apply_ssfs(combined_satellite_properties_rotated,ssfs,surveys=surveys)
             #Append satellite realizations
             combined_satellite_properties_list.append(combined_satellite_properties_rotated)
             #Append counts

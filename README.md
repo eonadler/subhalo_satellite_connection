@@ -25,6 +25,12 @@ PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view
 
 -- Improves vectorization of MCMC evaluation for MPI runs
 
+### [2504.16203](https://arxiv.org/abs/2504.16203): Predictions for the Detectability of Milky Way Satellite Galaxies and Outer-Halo Star Clusters with the Vera C. Rubin Observatory
+
+-- Develops survey selection function and footprint for LSST.
+
+-- Makes predictions for satellite population that will be observed by LSST.
+
 ### Utils
 
 -- Contains tools for calculating the orbits of "orphan" (disrupted) subhalos in dark matter-only simulations, which are used in the V1 and V2 analyses, and tools for computing the likelihood of a satellite galaxy--subhalo connection model given an observed satellite population.

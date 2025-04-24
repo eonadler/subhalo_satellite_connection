@@ -110,6 +110,8 @@ def load_mask(survey):
         indices = read_map('../Classifier/healpix_mask_{}_v5.1.fits'.format(survey), nest=True)
     elif survey == 'ps1':
         indices = read_map('../Classifier/healpix_mask_{}_v5.1.fits'.format(survey), nest=True)
+    elif survey.startswith('lsst'):
+        indices = read_map('../Classifier/healpix_mask_{}_v3.1.fits'.format('lsst'), nest=True)
     else:
         print('invalid survey')
     return indices

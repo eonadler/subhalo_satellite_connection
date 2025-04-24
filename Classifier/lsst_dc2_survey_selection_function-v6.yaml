@@ -1,0 +1,15 @@
+infile:
+  stellar_density: ../Classifier/ps1_stellar_density_r22_equ_n128_v0.fits
+operation:
+  survey: 'lsst'
+  algorithm: 'simple'
+  params_intrinsic:
+  - - distance
+    - log
+  - - abs_mag
+    - linear
+  - - r_physical
+    - log
+simple:
+  # Originally named v6_classifier2.0.model
+  classifier: ../Classifier/classifier_lsst_dc2_v6.2.model
