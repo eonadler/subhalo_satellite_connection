@@ -15,9 +15,9 @@ Code releases and accompanying papers:
 
 -- The healpix masks necessary to implement the DES and PS1 survey selection functions in V2 can downloaded using the following links. Please see https://github.com/des-science/mw-sats for additional information.
 
-DES mask: https://drive.google.com/file/d/1yF0pysai6rY13x17YY3KXZGVeDp25skz/view?usp=sharing
+DES mask: [healpix_mask_des_v5.1.fits.zip](https://github.com/eonadler/subhalo_satellite_connection/releases/download/v0.4/healpix_mask_des_v5.1.fits.zip)
   
-PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view?usp=sharing
+PS1 mask: [healpix_mask_ps1_v5.1.fits.zip](https://github.com/eonadler/subhalo_satellite_connection/releases/download/v0.4/healpix_mask_ps1_v5.1.fits.zip)
 
 ### [2401.10318](https://arxiv.org/abs/2401.10318): Forecasts for Galaxy Formation and Dark Matter Constraints from Dwarf Galaxy Surveys.
 
@@ -30,6 +30,9 @@ PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view
 -- Develops survey selection function and footprint for LSST.
 
 -- Makes predictions for satellite population that will be observed by LSST.
+
+LSST mask: [healpix_mask_lsst_v3.1.fits.zip](https://github.com/eonadler/subhalo_satellite_connection/releases/download/v0.4/healpix_mask_lsst_v3.1.fits.zip)
+
 
 ### Utils
 
