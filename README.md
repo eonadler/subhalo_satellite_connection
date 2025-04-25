@@ -25,7 +25,7 @@ PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view
 
 -- Improves vectorization of MCMC evaluation for MPI runs
 
-### [2504.16203](https://arxiv.org/abs/2504.16203): Predictions for the Detectability of Milky Way Satellite Galaxies and Outer-Halo Star Clusters with the Vera C. Rubin Observatory
+### [2504.16203](https://arxiv.org/abs/2504.16203): Predictions for the Detectability of Milky Way Satellite Galaxies and Outer-Halo Star Clusters with the Vera C. Rubin Observatory.
 
 -- Develops survey selection function and footprint for LSST.
 
@@ -41,4 +41,4 @@ PS1 mask: https://drive.google.com/file/d/1UBlFSKB5CehFy1lwrITKRmoiFWvs3cK3/view
 
 ### Classifier
 
--- Contains XGBoost satellite selection function model from [1912.03302](https://arxiv.org/abs/1912.03302).
+-- Contains XGBoost satellite selection function models from [1912.03302](https://arxiv.org/abs/1912.03302) and [2504.16203](https://arxiv.org/abs/2504.16203).
