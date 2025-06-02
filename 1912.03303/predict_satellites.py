@@ -344,7 +344,7 @@ def get_orphan_satellite_properties(halo_data,params,hparams,cosmo_params,vpeak_
     c = halo_data['rvir_orphan']/halo_data['rs_orphan']
     c_correction = (c[cut_idx]/10.0)**(hparams['gamma_r'])
     beta_correction = ((Halo_subs_cut[:,4]/Halo_subs_cut[:,9]).clip(max=1.0))**hparams['beta']
-    Halo_r12 = params['A']*c_correction*beta_correction*((halo_data['rvir_orphan'][cut_idx]/(hparams['R0']*0.702))**params['n'])
+    Halo_r12 = params['A']*c_correction*beta_correction*((halo_data['rvir_orphan'][cut_idx]/(hparams['R0']*cosmo_params['h']))**params['n'])
     orphan_satellite_properties['r12'] = np.random.lognormal(np.log(Halo_r12),np.log(10)*params['sigma_r'])
     orphan_satellite_properties['mu'] = Mr_to_mu(orphan_satellite_properties['Mr'],orphan_satellite_properties['r12'])
 

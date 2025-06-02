@@ -82,7 +82,7 @@ def read_map(filename,nest=False,hdu=None,h=False,verbose=True):
             if verbose: print('Ordering converted to RING')
 
     if h:
-        return m, header
+        return m, hdr
     else:
         return m
 
