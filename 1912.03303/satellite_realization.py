@@ -18,8 +18,9 @@ from load_satellites import get_true_counts
 
 def transform_to_sky_coords(rotated_pos):
     Halo_sky_coord = SkyCoord(x=rotated_pos[:,0],y=rotated_pos[:,1],z=rotated_pos[:,2],
-                              unit='kpc',representation_type='cartesian').spherical
-    return Halo_sky_coord.lon.degree, Halo_sky_coord.lat.degree
+                              unit='kpc',representation_type='cartesian')
+    Halo_sky_coord = Halo_sky_coord.transform_to('icrs')
+    return Halo_sky_coord.spherical.lon.degree, Halo_sky_coord.spherical.lat.degree
 
 
 def satellite_realization(param_vector,hparams,cosmo_params,orphan_params,halo_data,sim_indices,vpeak_Mr_interp,masks,ssfs,suppression,surveys=['des','ps1']):
