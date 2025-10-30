@@ -21,7 +21,7 @@ def load_hyperparams():
     Returns hyperparameters, cosmological parameters, and loads data for predict_satellites.py and predict_orphans.py
     """
     #Load halo data (encoding='latin1' for Python3)
-    with open('../Data/halo_data.pkl', 'rb') as halo_input:
+    with open('../Data/halo_data_new.pkl', 'rb') as halo_input:
         halo_data = pickle.load(halo_input, encoding='latin1')
 
     #Load interpolator
