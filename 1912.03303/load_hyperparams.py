@@ -51,7 +51,7 @@ def load_hyperparams():
     prior_hparams = {}
     prior_hparams['alpha'] = np.array([-2.,-1.1])
     prior_hparams['sigma_M'] = np.array([0.,2.])
-    prior_hparams['M50'] = np.array([7.35,10.85])
+    prior_hparams['M50'] = np.array([7.49,11.])
     prior_hparams['sigma_mpeak'] = np.array([1e-5,1.])
     prior_hparams['B'] = np.array([1e-5,3.])
     prior_hparams['A'] = np.array([10.,500.])
